@@ -1,0 +1,19 @@
+{
+  "name": "Female Switcher",
+  "description": "Hehehe",
+  "version": "0.12",
+  "permissions": [
+    "activeTab"
+  ],
+  "content_scripts": [
+    {"js": ["background.js"],
+	 "matches" : ["<all_urls>"],
+    "run_at": "document_idle"}
+  ],
+  "browser_action": {
+    "default_title": "Switch to female",
+    "default_popup": "popup.html"
+  },
+  "manifest_version": 2,
+  "minimum_chrome_version": "23"
+}
