@@ -31,18 +31,31 @@ function matchCase(text, pattern) {
     return result;
 }
 
+var blacklist = new Set([ // te słowa pomijaj w zamianie bo nie mają sensu, tylko przykład
+	"zgwałciłeś"
+]);
+
+function processWord(w){
+	if(w in blacklist) return false;
+	if(w.endsWith('łeś')) return w.replace(/łeś$/, 'łaś');
+	return false;
+}
+
 function processString(s){
 	var words = s.split(/[ \n]/);
-	word = words.map(w => w.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""));
+	words = words.map(w => w.replace(/[.\,\/#!$%\^&\*;:{}=\-_`~()]/g,""));
 	words = [...new Set(words)];
 	
 	console.log(words);
 	
 	var result = s;
 	for(i in words){
-		let word = words
+		let word = words[i];
+		let newWord = processWord(word);
+		if(newWord)
+			result = result.replace(word, match => matchCase(newWord, match)); // zachowaj wielkość liter
 	}
-	if(result == s) return null;
+	if(result == s) return false;
 	return result;
 }
 
@@ -51,7 +64,11 @@ function replacePronouns() {
 	replaceTextNodes(document.body);
 }
 
-var t0 = performance.now()
-replacePronouns();
-var t1 = performance.now()
-console.log("Script took " + (t1 - t0) + " milliseconds.")
+
+
+setTimeout(function (){
+	var t0 = performance.now()
+	replacePronouns();
+	var t1 = performance.now()
+	console.log("Script took " + (t1 - t0) + " milliseconds.")
+}, 2000); // chwilowy hack na dynamiczny kontent, np fb
